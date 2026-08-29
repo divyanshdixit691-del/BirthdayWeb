@@ -285,7 +285,7 @@ button { font-family: inherit; }
   width: 100%;
   display: flex;
   justify-content: center;
-  margin: 4px 0 clamp(40px, 7vw, 64px);
+  margin: 4px 0 10px;
   opacity: 0;
   transform: translateY(14px);
 }
@@ -295,8 +295,12 @@ button { font-family: inherit; }
 
 .portrait__frame {
   position: relative;
-  width: min(92vw, 460px);
-  aspect-ratio: 802 / 1783;
+  /* big, like the original — bounded only loosely now so it can't
+     literally break the page on a tiny viewport, but on any normal
+     screen this will render close to full intended size. */
+  width: min(82vw, 520px);
+  height: min(58vh, 560px);
+  aspect-ratio: auto;
 }
 
 .portrait__sketch,
@@ -319,6 +323,11 @@ button { font-family: inherit; }
 .portrait__sketch {
   z-index: 2;
   filter: drop-shadow(0 12px 30px rgba(138, 74, 86, 0.12));
+  /* hidden by default from the very first paint — JS animates this
+     open. Without this, the full sketch flashes visible for a moment
+     before the draw animation kicks in. */
+  clip-path: inset(100% 0 0 0);
+  -webkit-clip-path: inset(100% 0 0 0);
 }
 
 .portrait__photo {
@@ -340,12 +349,12 @@ button { font-family: inherit; }
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-top: clamp(6px, 2vw, 18px);
+  margin-top: 0;
   padding: 15px 34px;
-  background: transparent;
+  background: var(--rose);
   border: 1px solid var(--rose);
   border-radius: 999px;
-  color: var(--rose-deep);
+  color: var(--cream);
   font-family: var(--font-body);
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -354,17 +363,20 @@ button { font-family: inherit; }
   cursor: pointer;
   overflow: hidden;
   opacity: 0;
+  visibility: hidden;
   transform: translateY(10px);
+  box-shadow: 0 10px 26px -14px rgba(138, 74, 86, 0.45);
   transition: background 420ms var(--ease-soft), color 420ms var(--ease-soft),
               box-shadow 420ms var(--ease-soft), transform 250ms var(--ease-out);
 }
 .btn-elegant.is-visible {
+  visibility: visible;
   animation: fadeInUp 900ms var(--ease-out) forwards;
 }
 .btn-elegant:hover {
-  background: var(--rose);
+  background: var(--rose-deep);
   color: var(--cream);
-  box-shadow: 0 14px 30px -12px rgba(138, 74, 86, 0.5);
+  box-shadow: 0 14px 30px -12px rgba(138, 74, 86, 0.55);
 }
 .btn-elegant:active { transform: translateY(1px) scale(0.99); }
 .btn-elegant .arrow {
@@ -415,7 +427,7 @@ button { font-family: inherit; }
 }
 
 .message--final p {
-  font-style: italic;
+  font-style: normal;
   font-weight: 700;
   color: var(--text-deep);
 }
@@ -425,7 +437,7 @@ button { font-family: inherit; }
 /* --------------------------------------------------------------------- */
 
 .message--letter p {
-  font-style: italic;
+  font-style: normal;
   font-weight: 700;
   text-align: left;
 }
@@ -468,7 +480,7 @@ button { font-family: inherit; }
 }
 
 .message--letter .love-ending {
-  font-style: italic;
+  font-style: normal;
   text-align: center;
   font-weight: 700;
   font-size: clamp(18px, 3.4vw, 23px);
@@ -610,7 +622,8 @@ button { font-family: inherit; }
     width: clamp(110px, 34vw, 190px);
   }
   .portrait__frame {
-    width: min(88vw, 380px);
+    width: min(82vw, 460px);
+    height: min(52vh, 480px);
   }
 }
 
@@ -622,317 +635,46 @@ button { font-family: inherit; }
 
 @media (max-height: 620px) and (orientation: landscape) {
   .page { padding: 4vh 6vw; }
-  .portrait__frame { width: min(48vh, 260px); }
-  .title-script { font-size: clamp(46px, 10vh, 90px); }
-}
-
-html, body, .app { max-width: 100vw; }
-/* =========================================================
-   PAGE 3 MESSAGE — SAME STYLE AS PAGE 2
-   ========================================================= */
-.heading-small {
-  margin: 0 0 clamp(20px, 4vw, 32px);
-  font-family: var(--font-body);
-  font-weight: 700;
-  letter-spacing: 0.3em;
-  font-size: clamp(13px, 2vw, 16px);
-  text-transform: uppercase;
-  color: var(--rose-deep);
-  opacity: 0;
-}
-.heading-small.is-visible {
-  animation: fadeInUp 900ms var(--ease-out) forwards;
-}
-
-.message {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(14px, 3vw, 22px);
-  margin-bottom: clamp(34px, 6vw, 54px);
-}
-
-/* Updated to font-weight: 700 for BOLD paragraphs */
-.message p {
-  margin: 0;
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: clamp(18px, 3.4vw, 24px);
-  line-height: 1.6;
-  color: var(--text-deep);
-  opacity: 0;
-  transform: translateY(14px);
-}
-
-.message p.is-visible {
-  animation: fadeInUp 950ms var(--ease-out) forwards;
-}
-
-.message--final p {
-  font-style: italic;
-  font-weight: 700;
-  color: var(--text-deep);
-}
-
-/* --------------------------------------------------------------------- */
-/* LETTER-SPECIFIC TYPOGRAPHY                                             */
-/* --------------------------------------------------------------------- */
-
-.message--letter p {
-  font-style: italic;
-  font-weight: 700;
-  text-align: left;
-}
-
-@media (max-width: 560px) {
-  .message--letter p { text-align: center; }
-}
-
-.message--letter .letter-opening {
-  margin-bottom: 4px;
-  font-style: normal;
-  text-align: center;
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: clamp(19px, 3.6vw, 26px);
-  color: var(--rose-deep);
-  letter-spacing: 0.01em;
-}
-
-.message--letter .emotional-line {
-  font-style: normal;
-  text-align: center;
-  font-weight: 700;
-  font-size: clamp(19px, 3.6vw, 25px);
-  color: var(--rose-deep);
-  letter-spacing: 0.01em;
-  padding: 2px 0;
-}
-
-.message--letter .big-emotional-line {
-  font-style: normal;
-  text-align: center;
-  font-family: var(--font-script);
-  font-weight: 700;
-  font-size: clamp(34px, 7vw, 52px);
-  line-height: 1.25;
-  color: var(--rose-deep);
-  text-shadow: 0 6px 20px rgba(138, 74, 86, 0.16);
-  margin: 6px 0;
-}
-
-.message--letter .love-ending {
-  font-style: italic;
-  text-align: center;
-  font-weight: 700;
-  font-size: clamp(18px, 3.4vw, 23px);
-  color: var(--text-soft);
-}
-
-.final-wish {
-  margin: clamp(10px, 3vw, 18px) 0 0.2em;
-  font-family: var(--font-script);
-  font-weight: 400;
-  font-size: clamp(46px, 10vw, 82px);
-  color: var(--rose-deep);
-  opacity: 0;
-  transform: translateY(14px) scale(0.97);
-  text-shadow: 0 8px 26px rgba(138, 74, 86, 0.2);
-}
-.final-wish.is-visible {
-  animation: gentleReveal 1400ms var(--ease-out) forwards;
-}
-
-@keyframes gentleReveal {
-  from { opacity: 0; transform: translateY(14px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.final-title {
-  margin: clamp(28px, 6vw, 48px) 0 clamp(4px, 1vw, 10px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.title-script--final {
-  font-size: clamp(50px, 12vw, 96px);
-}
-
-.title-hand--final {
-  font-size: clamp(26px, 6.4vw, 44px);
-}
-
-.final-sub {
-  margin: 0 0 clamp(30px, 6vw, 48px);
-  font-family: var(--font-body);
-  font-style: italic;
-  font-weight: 700;
-  font-size: clamp(15px, 2.6vw, 19px);
-  color: var(--text-soft);
-  opacity: 0;
-  transform: translateY(10px);
-}
-.final-sub.is-visible {
-  animation: fadeInUp 1100ms var(--ease-out) forwards;
-}
-
-.signature {
-  font-family: var(--font-hand);
-  font-weight: 700;
-  font-size: clamp(22px, 4vw, 30px);
-  color: var(--rose);
-  opacity: 0;
-  transform: translateY(10px);
-}
-.signature.is-visible {
-  animation: fadeInUp 1300ms var(--ease-out) forwards;
-}
-
-/* --------------------------------------------------------------------- */
-/* FLOATING PETALS / HEARTS / GLOW PARTICLES                              */
-/* --------------------------------------------------------------------- */
-
-.petals-field,
-.glow-particles {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.petal {
-  position: absolute;
-  top: -40px;
-  border-radius: 60% 0 60% 0;
-  background: linear-gradient(135deg, var(--dusty-rose), var(--rose));
-  opacity: 0.55;
-  animation-name: petalFall;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-
-.petal.is-heart {
-  border-radius: 0;
-  background: none;
-  font-family: serif;
-  color: var(--rose);
-  font-size: 18px;
-  opacity: 0.5;
-}
-
-@keyframes petalFall {
-  0% {
-    transform: translate3d(0, -8vh, 0) rotate(0deg);
-    opacity: 0;
-  }
-  10% { opacity: 0.6; }
-  90% { opacity: 0.5; }
-  100% {
-    transform: translate3d(var(--drift, 40px), 112vh, 0) rotate(340deg);
-    opacity: 0;
-  }
-}
-
-.glow-dot {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--cream) 0%, rgba(255, 249, 244, 0) 70%);
-  opacity: 0;
-  animation-name: glowPulse;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-}
-
-@keyframes glowPulse {
-  0%, 100% { opacity: 0; transform: scale(0.6); }
-  50%      { opacity: 0.9; transform: scale(1.4); }
-}
-
-/* --------------------------------------------------------------------- */
-/* RESPONSIVE ADJUSTMENTS                                                 */
-/* --------------------------------------------------------------------- */
-
-@media (max-width: 720px) {
-  .page {
-    padding: 7vh 6vw 8vh;
-  }
-  .floral {
-    width: clamp(110px, 34vw, 190px);
-  }
   .portrait__frame {
-    width: min(88vw, 380px);
+    width: min(72vw, 420px);
+    height: min(52vh, 420px);
   }
-}
-
-@media (max-width: 420px) {
-  .eyebrow { letter-spacing: 0.3em; }
-  .title-hand { letter-spacing: 0.08em; }
-  .btn-elegant { padding: 13px 26px; }
-}
-
-@media (max-height: 620px) and (orientation: landscape) {
-  .page { padding: 4vh 6vw; }
-  .portrait__frame { width: min(48vh, 260px); }
   .title-script { font-size: clamp(46px, 10vh, 90px); }
 }
 
-html, body, .app { max-width: 100vw; }
-/* PAGE 3 - KEEP ALL LETTER TEXT PERFECTLY CENTERED */
+/* --------------------------------------------------------------------- */
+/* PAGE 3 — its own distinct letter style: bold, upright, centered       */
+/* (kept deliberately different from Page 2's italic/left-aligned look)  */
+/* --------------------------------------------------------------------- */
 
-.page--three .message--letter p {
-    text-align: center !important;
-    width: 100% !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-}
-
+.page--three .message--letter p,
 .page--three .message--final p {
-    text-align: center !important;
-    font-style: normal !important;
-    font-weight: 700 !important;
+  font-style: normal;
+  font-weight: 700;
+  text-align: center;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(20px, 3.7vw, 26px);
 }
-/* PAGE 3 TEXT SIZE */
-.page--three .message--final p {
-    font-size: clamp(20px, 3.7vw, 26px) !important;
-}
-/* PAGE 3 — PETALS THROUGHOUT THE WHOLE SCROLLING PAGE */
 
 .page--three {
-    position: relative;
-}
-
-.page--three .petals-field {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100%;
-    min-height: 100%;
-    overflow: hidden;
-    pointer-events: none;
-    z-index: 1;
+  position: relative;
 }
 
 .page--three .stage {
-    position: relative;
-    z-index: 2;
-}
-/* PAGE 3 — ALL MESSAGE PARAGRAPHS SAME STYLE */
-
-.page--three #finalMessage,
-.page--three #finalMessage p {
-    font-family: "Cormorant Garamond", serif !important;
-    font-size: 26px !important;
-    font-weight: 700 !important;
-    font-style: normal !important;
-    color: var(--text-deep) !important;
-    text-align: center !important;
-    line-height: 1.6 !important;
+  position: relative;
+  z-index: 2;
 }
 
-.page--three #finalMessage p {
-    margin: 0 0 20px 0 !important;
+.page--three .petals-field {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
 }
