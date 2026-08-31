@@ -110,11 +110,18 @@ button { font-family: inherit; }
 }
 
 .page--two,
-.page--three {
+.page--three,
+.page--four {
   align-items: flex-start;
-  overflow: visible;
+  overflow: hidden;
   padding-top: clamp(56px, 11vh, 96px);
   padding-bottom: clamp(56px, 11vh, 96px);
+}
+
+.page--two.is-active,
+.page--three.is-active,
+.page--four.is-active {
+  overflow: visible;
 }
 
 .page--three {
@@ -258,6 +265,18 @@ button { font-family: inherit; }
   to   { width: 100%; }
 }
 
+.page4-caption {
+  margin: 0 0 clamp(24px, 4.5vw, 40px);
+  font-family: var(--font-hand);
+  font-weight: 600;
+  font-size: clamp(16px, 2.6vw, 22px);
+  color: var(--rose-deep);
+  opacity: 0;
+}
+.page4-caption.is-visible {
+  animation: fadeInUp 1100ms var(--ease-out) forwards;
+}
+
 .subtitle {
   margin: 0.2em 0 clamp(28px, 5vw, 46px);
   font-family: var(--font-body);
@@ -322,26 +341,22 @@ button { font-family: inherit; }
 
 .portrait__sketch {
   z-index: 2;
-  filter: drop-shadow(0 12px 30px rgba(138, 74, 86, 0.12));
-  /* hidden by default from the very first paint — JS animates this
-     open. Without this, the full sketch flashes visible for a moment
-     before the draw animation kicks in. */
-  clip-path: inset(100% 0 0 0);
-  -webkit-clip-path: inset(100% 0 0 0);
+  opacity: 1;
+  visibility: hidden;
+  filter: drop-shadow(0 14px 30px rgba(138, 74, 86, 0.18));
 }
 
 .portrait__photo {
   z-index: 1;
   opacity: 0;
-  filter: saturate(0.92) drop-shadow(0 12px 30px rgba(138, 74, 86, 0.12));
-  transition: opacity 2600ms var(--ease-soft);
+  transition: opacity 1600ms var(--ease-soft);
 }
 .portrait__photo.is-revealed {
   opacity: 1;
 }
 
 /* --------------------------------------------------------------------- */
-/* BUTTONS                                                                 */
+/* CTA BUTTON                                                             */
 /* --------------------------------------------------------------------- */
 
 .btn-elegant {
@@ -643,6 +658,48 @@ button { font-family: inherit; }
 }
 
 /* --------------------------------------------------------------------- */
+/* PAGE 4 — memory sketch + closing message (matches page 2/3 letter style) */
+/* --------------------------------------------------------------------- */
+
+.memory-sketch {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: clamp(10px, 3vw, 20px) 0 clamp(24px, 4vw, 36px);
+}
+
+.memory-sketch img {
+  width: min(82vw, 480px);
+  height: auto;
+  display: block;
+}
+
+.page4-message {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 3vw, 22px);
+  margin-bottom: clamp(34px, 6vw, 54px);
+  width: 100%;
+}
+
+.page4-message p {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 700;
+  text-align: center;
+  width: 100%;
+  font-size: clamp(20px, 3.7vw, 26px);
+  line-height: 1.6;
+  color: var(--text-deep);
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.page4-message p.is-visible {
+  animation: fadeInUp 950ms var(--ease-out) forwards;
+}
+
+/* --------------------------------------------------------------------- */
 /* PAGE 3 — its own distinct letter style: bold, upright, centered       */
 /* (kept deliberately different from Page 2's italic/left-aligned look)  */
 /* --------------------------------------------------------------------- */
@@ -656,10 +713,6 @@ button { font-family: inherit; }
   margin-left: auto;
   margin-right: auto;
   font-size: clamp(20px, 3.7vw, 26px);
-}
-
-.page--three {
-  position: relative;
 }
 
 .page--three .stage {
