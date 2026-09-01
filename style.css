@@ -666,12 +666,29 @@ button { font-family: inherit; }
   display: flex;
   justify-content: center;
   margin: clamp(10px, 3vw, 20px) 0 clamp(24px, 4vw, 36px);
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 900ms var(--ease-out), transform 900ms var(--ease-out);
+}
+
+.memory-sketch.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .memory-sketch img {
   width: min(82vw, 480px);
   height: auto;
   display: block;
+  filter: drop-shadow(0 14px 30px rgba(138, 74, 86, 0.18));
+  clip-path: inset(100% 0 0 0);
+  -webkit-clip-path: inset(100% 0 0 0);
+  transition: clip-path 7800ms var(--ease-out), -webkit-clip-path 7800ms var(--ease-out);
+}
+
+.memory-sketch.is-drawn img {
+  clip-path: inset(0 0 0 0);
+  -webkit-clip-path: inset(0 0 0 0);
 }
 
 .page4-message {
@@ -697,6 +714,20 @@ button { font-family: inherit; }
 
 .page4-message p.is-visible {
   animation: fadeInUp 950ms var(--ease-out) forwards;
+}
+
+.page4-message p.page4-thanks {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: clamp(40px, 9vw, 68px);
+  line-height: 1.1;
+  color: var(--rose-deep);
+  letter-spacing: 0.02em;
+  text-shadow: 0 6px 20px rgba(138, 74, 86, 0.18);
+}
+
+.page4-message p.page4-thanks strong {
+  font-weight: 400;
 }
 
 /* --------------------------------------------------------------------- */
